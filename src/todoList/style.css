@@ -1,0 +1,41 @@
+.input {
+  margin-top: 30px;
+}
+.input input{
+    outline-style: none;
+    border: none;
+    border-radius: 8px;
+    border: solid 2px #b3e5fc;
+    margin-right: 40px;
+    height: 30px;
+    width: 300px;
+}
+.input input:focus{
+    box-shadow: 0 0 6px 2px #b3e5fc;
+}
+.task{
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    padding-left: 20px;
+    line-height: 40px;
+    background-color: #e1f5fe;
+    border-radius: 10px;
+    border: solid 2px #b3e5fc;
+    margin: 20px 0;
+    transition: .2s ease;
+}
+.task:hover{
+    scale: 1.02;
+}
+.Task-title{
+    font-size: 25px;
+    font-weight: 600;
+    color: #1565c0;
+}
+.task-detail{
+    font-size: 15px;
+    font-weight: 500;
+    color: #424242;
+
+}
