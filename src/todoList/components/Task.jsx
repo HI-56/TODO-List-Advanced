@@ -4,13 +4,15 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import EditIcon from "@mui/icons-material/Edit";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import { Box } from "@mui/material";
-export default function Task({ task, title }) {
+export default function Task({ title, detail ,onDelate}) {
+
+ 
   return (
     <>
       <div className="task">
         <div>
           <div className="Task-title">{title}</div>
-          <div className="task-detail">{task}</div>
+          <div className="task-detail">{detail}</div>
         </div>
         <div className="action-btn">
           <Box sx={{ margin: "5px" }}>
@@ -19,6 +21,7 @@ export default function Task({ task, title }) {
               color="error"
               aria-label="delete"
               sx={{ margin: "5px" }}
+              onClick={onDelate}
             >
               <DeleteOutlineOutlinedIcon />
             </Fab>
