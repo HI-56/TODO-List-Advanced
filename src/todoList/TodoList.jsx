@@ -4,6 +4,7 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Task from "./components/Task";
 import { useState } from "react";
+import ConfirmeDelete from "./components/deleteConfirme";
 
 export default function TodoList() {
   const localstorage = window.localStorage.getItem("tasks")
@@ -12,32 +13,58 @@ export default function TodoList() {
   const [tasks, setTasks] = useState(localstorage);
   //const [done, setDone] = useState([]);
   //const [notyet, setNotyet] = useState([]);
-  const [id, setId] = useState();
   const [input, setInput] = useState("");
+  const [open, setOpen] = useState(false);
+  const [doDelete, setDoDelete]  = useState(false);
+    
+
+  const handleClose = (para) => {
+    setOpen(para);
+  };
+
+  function hundleDoDelete(para){
+    setDoDelete(para)
+  }
 
   const hundleAddTask = () => {
     if (input !== "") {
-      setTasks([...tasks, { title: input, detail: "", Id: id }]);
+      setTasks([
+        ...tasks,
+        {
+          title: input,
+          detail: "",
+          Id: Date.now(),
+          time: new Date().toLocaleDateString("en-GB"),
+        },
+      ]);
       setInput("");
     }
   };
   // hundle delete and update and done :
-  function deletetask(id) {
-    let newTasks = tasks.filter((t) => {
-      return t.Id !== id;
-    });
-    return setTasks(newTasks);
+  function hundleOpen(para){
+      setOpen(para);
   }
-//function hundleUpdate(){
+  console.log(doDelete)
+  function deletetask(id) {
+    TaskDeleted(id);
+    
+    }
+    function TaskDeleted(ID){
+      console.log(ID)
+      if (doDelete) {
+        let newTasks = tasks.filter((t) => {
+        return t.Id !== ID;
+      });
+      return setTasks(newTasks);
+    }
+    }
+    
+  //function hundleUpdate(){
 
-//}
-
-
-
+  //}
 
   // hundle delete and update and done :
-  
-  
+
   window.localStorage.setItem("tasks", JSON.stringify(tasks));
   return (
     <>
@@ -70,20 +97,19 @@ export default function TodoList() {
               key={t.Id}
               title={t.title}
               detail={t.detail}
-              onDelate={() => {
-                deletetask(t.Id);
-              }}
-              tasks={tasks}
+              onOpen={hundleOpen}
+              onDelete = {()=>{deletetask(t.Id)}}
             ></Task>
+            
           );
         })}
+        <ConfirmeDelete ondelete = {deletetask} onclose = {handleClose} open = {open} doDelete = {()=>{hundleDoDelete(true)}}></ConfirmeDelete>
         <div className="input">
           <input
             type="text"
             value={input}
             onChange={(e) => {
               setInput(e.target.value);
-              setId(tasks.length === 0 ? 1 : tasks.length + 1);
             }}
           />
           <Fab
