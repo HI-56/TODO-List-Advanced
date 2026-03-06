@@ -8,21 +8,15 @@ import ConfirmeDelete from "./deleteConfirme";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
 
-
-
 export default function Task({ title, detail, onDelete }) {
-
-
   const [open, setOpen] = useState(false);
 
-  function handleClose(){
-    setOpen(false)
+  function handleClose() {
+    setOpen(false);
   }
-  function hundleOpen(){
+  function hundleOpen() {
     setOpen(true);
   }
-
-
 
   return (
     <>
@@ -48,6 +42,13 @@ export default function Task({ title, detail, onDelete }) {
               >
                 <DeleteOutlineOutlinedIcon />
               </Fab>
+              <ConfirmeDelete
+                yesDelete={() => {
+                  onDelete();
+                }}
+                onclose={handleClose}
+                open={open}
+              ></ConfirmeDelete>
               <Fab
                 size="medium"
                 color="info"
@@ -67,12 +68,6 @@ export default function Task({ title, detail, onDelete }) {
             </Box>
           </div>
         </Grid>
-        <ConfirmeDelete
-        yesDelete = {()=>{onDelete()}}
-          onclose={handleClose}
-          open={open}
-          
-        ></ConfirmeDelete>
       </Grid>
     </>
   );

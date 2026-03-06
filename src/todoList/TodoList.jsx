@@ -4,8 +4,10 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Task from "./components/Task";
 import { useState } from "react";
-
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import TextField from "@mui/material/TextField";
+import Collapse from "@mui/material/Collapse";
 
 export default function TodoList() {
   const localstorage = window.localStorage.getItem("tasks")
@@ -15,11 +17,7 @@ export default function TodoList() {
   //const [done, setDone] = useState([]);
   //const [notyet, setNotyet] = useState([]);
   const [input, setInput] = useState("");
-  
-  
-
-  
-  
+  const [colapse, setColapse] = useState(false);
   const hundleAddTask = () => {
     if (input !== "") {
       setTasks([
@@ -32,21 +30,21 @@ export default function TodoList() {
         },
       ]);
       setInput("");
+      setColapse(false);
     }
   };
   // hundle delete and update and done :
-  
+
   function deletetask(id) {
     let newTasks = tasks.filter((t) => {
       return t.Id !== id;
     });
     return setTasks(newTasks);
   }
-  
 
-  //function hundleUpdate(){
-
-  //}
+  /*function hundleUpdate(id){
+    return setTasks(tasks.find((t)=>))
+  }*/
 
   // hundle delete and update and done :
 
@@ -76,6 +74,11 @@ export default function TodoList() {
         >
           TODO LIST
         </div>
+        <ToggleButtonGroup>
+          <ToggleButton value="All tasks">All tasks</ToggleButton>
+          <ToggleButton value="Finiched tasks">Finiched tasks</ToggleButton>
+          <ToggleButton value="Unfiniched tasks">Unfiniched tasks</ToggleButton>
+        </ToggleButtonGroup>
         {tasks.map((t) => {
           return (
             <Task
@@ -85,28 +88,35 @@ export default function TodoList() {
               onDelete={() => {
                 deletetask(t.Id);
               }}
-              
             ></Task>
           );
         })}
         <div className="input">
-          <TextField
-            id="outlined-basic"
-            label="Task Title"
-            variant="outlined"
-            type="text"
-            value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-          />
+          <Collapse in={colapse}>
+            <TextField
+              id="outlined-basic"
+              label="Task Title"
+              variant="outlined"
+              type="text"
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+              }}
+              onMouseLeave={() => {
+                setColapse(false);
+              }}
+            />
+          </Collapse>
 
           <Fab
-          sx={{marginLeft : "20px"}}
+            sx={{ marginTop: "10px" }}
             size="medium"
             color="info"
             aria-label="add"
             onClick={hundleAddTask}
+            onMouseEnter={() => {
+              setColapse(true);
+            }}
           >
             <AddIcon />
           </Fab>
