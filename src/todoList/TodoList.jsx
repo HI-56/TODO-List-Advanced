@@ -4,7 +4,8 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Task from "./components/Task";
 import { useState } from "react";
-import ConfirmeDelete from "./components/deleteConfirme";
+
+import TextField from "@mui/material/TextField";
 
 export default function TodoList() {
   const localstorage = window.localStorage.getItem("tasks")
@@ -14,18 +15,11 @@ export default function TodoList() {
   //const [done, setDone] = useState([]);
   //const [notyet, setNotyet] = useState([]);
   const [input, setInput] = useState("");
-  const [open, setOpen] = useState(false);
-  const [doDelete, setDoDelete]  = useState(false);
-    
+  
+  
 
-  const handleClose = (para) => {
-    setOpen(para);
-  };
-
-  function hundleDoDelete(para){
-    setDoDelete(para)
-  }
-
+  
+  
   const hundleAddTask = () => {
     if (input !== "") {
       setTasks([
@@ -41,24 +35,15 @@ export default function TodoList() {
     }
   };
   // hundle delete and update and done :
-  function hundleOpen(para){
-      setOpen(para);
-  }
-  console.log(doDelete)
+  
   function deletetask(id) {
-    TaskDeleted(id);
-    
-    }
-    function TaskDeleted(ID){
-      console.log(ID)
-      if (doDelete) {
-        let newTasks = tasks.filter((t) => {
-        return t.Id !== ID;
-      });
-      return setTasks(newTasks);
-    }
-    }
-    
+    let newTasks = tasks.filter((t) => {
+      return t.Id !== id;
+    });
+    return setTasks(newTasks);
+  }
+  
+
   //function hundleUpdate(){
 
   //}
@@ -97,22 +82,27 @@ export default function TodoList() {
               key={t.Id}
               title={t.title}
               detail={t.detail}
-              onOpen={hundleOpen}
-              onDelete = {()=>{deletetask(t.Id)}}
+              onDelete={() => {
+                deletetask(t.Id);
+              }}
+              
             ></Task>
-            
           );
         })}
-        <ConfirmeDelete ondelete = {deletetask} onclose = {handleClose} open = {open} doDelete = {()=>{hundleDoDelete(true)}}></ConfirmeDelete>
         <div className="input">
-          <input
+          <TextField
+            id="outlined-basic"
+            label="Task Title"
+            variant="outlined"
             type="text"
             value={input}
             onChange={(e) => {
               setInput(e.target.value);
             }}
           />
+
           <Fab
+          sx={{marginLeft : "20px"}}
             size="medium"
             color="info"
             aria-label="add"

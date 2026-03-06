@@ -5,12 +5,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function ConfirmeDelete({ onclose, ondelete, open , doDelete }) {
+export default function ConfirmeDelete({ onclose, open , yesDelete}) {
   return (
     <>
       <Dialog
         open={open}
-        onClose={open}
+        onClose={onclose}
         aria-labelledby="draggable-dialog-title"
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
@@ -21,19 +21,19 @@ export default function ConfirmeDelete({ onclose, ondelete, open , doDelete }) {
             Do you really want to delete this task ?
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button
+        <DialogActions sx={{gap:"70px", padding:"10px 20px"}}>
+          <Button sx={{backgroundColor:"#90caf9", color : "white", borderRadius:"8px",width:"120px"}}
             autoFocus
             onClick={() => {
-              onclose(false);
+              onclose();
             }}
           >
-            Cancel Delete
+            Cancel
           </Button>
-          <Button
+          <Button sx={{backgroundColor:"#d50000", color : "white", borderRadius:"8px" ,width:"120px"}}
             onClick={() => {
-              ondelete;
-              doDelete();
+              yesDelete();
+              onclose;
             }}
           >
             Yes Delete

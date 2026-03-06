@@ -6,17 +6,11 @@
   left: 0;
   right: 0;
 }
-.input input{
+.input #outlined-basic{
     outline-style: none;
     border: none;
-    border-radius: 8px;
-    border: solid 2px #b3e5fc;
-    margin-right: 40px;
-    height: 30px;
+    height: 20px;
     width: 300px;
-}
-.input input:focus{
-    box-shadow: 0 0 6px 2px #b3e5fc;
 }
 .task{
     display: flex;
@@ -31,7 +25,9 @@
     transition: .2s ease;
 }
 .task:hover{
-    scale: 1.02;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    
 }
 .Task-title{
     font-size: 25px;
