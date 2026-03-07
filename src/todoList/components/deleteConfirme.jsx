@@ -12,6 +12,7 @@ export default function ConfirmeDelete({ onclose, open , yesDelete}) {
         open={open}
         onClose={onclose}
         aria-labelledby="draggable-dialog-title"
+        sx={{zIndex:"100000"}}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
           Delete
