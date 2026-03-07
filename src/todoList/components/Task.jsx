@@ -9,9 +9,9 @@ import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import UpdateTaskPopUp from "./updatePopUp";
 
-export default function Task({ title, detail, onDelete,id }) {
+export default function Task({ title, detail, onDelete, id, time }) {
   const [open, setOpen] = useState(false);
-  const [update,setUpdate] = useState(false)
+  const [update, setUpdate] = useState(false);
 
   function handleClose() {
     setOpen(false);
@@ -22,12 +22,11 @@ export default function Task({ title, detail, onDelete,id }) {
 
   //update functions:
   function handleUpdateClose() {
-    setUpdate(false)
+    setUpdate(false);
   }
   function hundleUpdateOpen() {
     setUpdate(true);
   }
-
 
   return (
     <>
@@ -38,7 +37,15 @@ export default function Task({ title, detail, onDelete,id }) {
             <div className="task-detail">{detail}</div>
           </div>
         </Grid>
-        <Grid size={4}>
+        <Grid
+          size={4}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            minHeight: "150px",
+          }}
+        >
           <div className="action-btn">
             <Box sx={{ margin: "5px" }}>
               <Fab
@@ -65,7 +72,6 @@ export default function Task({ title, detail, onDelete,id }) {
                 color="info"
                 aria-label="edit"
                 sx={{ margin: "5px" }}
-                
                 onClick={(e) => {
                   e.currentTarget.blur();
                   hundleUpdateOpen();
@@ -73,14 +79,13 @@ export default function Task({ title, detail, onDelete,id }) {
               >
                 <EditIcon />
               </Fab>
-              <UpdateTaskPopUp title = {title}
-              handleClose = {handleUpdateClose}
-              open = {update}
-              taskId = {id}
-              
-              >
-              
-              </UpdateTaskPopUp>
+              <UpdateTaskPopUp
+                title={title}
+                detail={detail}
+                handleClose={handleUpdateClose}
+                open={update}
+                taskId={id}
+              ></UpdateTaskPopUp>
               <Fab
                 size="medium"
                 color="success"
@@ -90,6 +95,25 @@ export default function Task({ title, detail, onDelete,id }) {
                 <CheckOutlinedIcon />
               </Fab>
             </Box>
+          </div>
+          <div
+            style={{
+              display: "inline-block",
+              alignSelf: "flex-end",
+              padding: "0px 5px",
+              backgroundColor: "#1976d2", // nice blue
+              color: "white",
+              fontWeight: 600,
+              fontSize: "14px",
+              borderRadius: "8px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+              textAlign: "center",
+              minWidth: "90px",
+              marginRight: "10px",
+              marginTop: "20px",
+            }}
+          >
+            {time}
           </div>
         </Grid>
       </Grid>

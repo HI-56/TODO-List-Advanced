@@ -91,6 +91,7 @@ export default function TodoList() {
                 id={t.Id}
                 title={t.title}
                 detail={t.detail}
+                time={t.time}
                 onDelete={() => {
                   deletetask(t.Id);
                 }}

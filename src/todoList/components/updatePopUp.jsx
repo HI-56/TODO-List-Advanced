@@ -9,21 +9,28 @@ import { useState } from "react";
 import { useContext } from "react";
 import { FormContext } from "../context";
 
-export default function UpdateTaskPopUp({ title, handleClose, open, taskId }) {
+export default function UpdateTaskPopUp({
+  title,
+  detail,
+  handleClose,
+  open,
+  taskId,
+}) {
   const [form, setForm] = useState({
     newtitle: title,
-    detail: "",
+    detail: detail,
   });
   const { hundleUpdate } = useContext(FormContext);
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose} sx={{zIndex:"100000"}}>
+      <Dialog open={open} onClose={handleClose} sx={{ zIndex: "100000" }}>
         <DialogTitle>Updating Task </DialogTitle>
         <DialogContent>
           <form id="subscription-form">
-            <TextField sx={{width:"500px"}}
-            multiline
+            <TextField
+              sx={{ width: "500px" }}
+              multiline
               id="outlined-basic"
               label="Title"
               variant="outlined"
@@ -33,11 +40,12 @@ export default function UpdateTaskPopUp({ title, handleClose, open, taskId }) {
                 setForm({ ...form, newtitle: e.target.value });
               }}
             />
-            <TextField sx={{width:"500px" }}
-            multiline
-            minRows={3} 
-            maxRows={8}
-            fullWidth
+            <TextField
+              sx={{ width: "500px" }}
+              multiline
+              minRows={3}
+              maxRows={8}
+              fullWidth
               id="outlined-basic"
               label="Detail"
               variant="outlined"
@@ -56,7 +64,7 @@ export default function UpdateTaskPopUp({ title, handleClose, open, taskId }) {
               color: "white",
               borderRadius: "8px",
               width: "120px",
-              marginRight:"50px"
+              marginRight: "50px",
             }}
             onClick={handleClose}
           >
@@ -68,7 +76,7 @@ export default function UpdateTaskPopUp({ title, handleClose, open, taskId }) {
               color: "white",
               borderRadius: "8px",
               width: "120px",
-              marginRight:"20px"
+              marginRight: "20px",
             }}
             onClick={() => {
               hundleUpdate(taskId, form);
