@@ -8,7 +8,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import TextField from "@mui/material/TextField";
 import Collapse from "@mui/material/Collapse";
-
+import { FormContext } from "./context";
 export default function TodoList() {
   const localstorage = window.localStorage.getItem("tasks")
     ? JSON.parse(window.localStorage.getItem("tasks"))
@@ -42,9 +42,13 @@ export default function TodoList() {
     return setTasks(newTasks);
   }
 
-  /*function hundleUpdate(id){
-    return setTasks(tasks.find((t)=>))
-  }*/
+  function hundleUpdate(id, form) {
+    return setTasks(
+      tasks.map((t) =>
+        t.Id === id ? { ...t, title: form.newtitle, detail: form.detail } : t
+      )
+    );
+  }
 
   // hundle delete and update and done :
 
@@ -79,18 +83,21 @@ export default function TodoList() {
           <ToggleButton value="Finiched tasks">Finiched tasks</ToggleButton>
           <ToggleButton value="Unfiniched tasks">Unfiniched tasks</ToggleButton>
         </ToggleButtonGroup>
-        {tasks.map((t) => {
-          return (
-            <Task
-              key={t.Id}
-              title={t.title}
-              detail={t.detail}
-              onDelete={() => {
-                deletetask(t.Id);
-              }}
-            ></Task>
-          );
-        })}
+        <FormContext.Provider value={{ hundleUpdate }}>
+          {tasks.map((t) => {
+            return (
+              <Task
+                key={t.Id}
+                id={t.Id}
+                title={t.title}
+                detail={t.detail}
+                onDelete={() => {
+                  deletetask(t.Id);
+                }}
+              ></Task>
+            );
+          })}
+        </FormContext.Provider>
         <div className="input">
           <Collapse in={colapse}>
             <TextField
