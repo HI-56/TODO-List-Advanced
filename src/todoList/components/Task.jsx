@@ -9,10 +9,10 @@ import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import UpdateTaskPopUp from "./updatePopUp";
 
-export default function Task({ title, detail, onDelete, id, time }) {
+export default function Task({ title, detail, onDelete, id, time,onDone,done }) {
   const [open, setOpen] = useState(false);
   const [update, setUpdate] = useState(false);
-
+  const [able,setAble] = useState(done);
   function handleClose() {
     setOpen(false);
   }
@@ -91,6 +91,11 @@ export default function Task({ title, detail, onDelete, id, time }) {
                 color="success"
                 aria-label="done"
                 sx={{ margin: "5px" }}
+                disabled ={able}
+                onClick={()=>{
+                  onDone();
+                  setAble(true)
+                }}
               >
                 <CheckOutlinedIcon />
               </Fab>

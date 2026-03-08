@@ -3,19 +3,19 @@ import { Container } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Task from "./components/Task";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import TextField from "@mui/material/TextField";
 import Collapse from "@mui/material/Collapse";
 import { FormContext } from "./context";
 export default function TodoList() {
-  const localstorage = window.localStorage.getItem("tasks")
+  const localstorageTasks = window.localStorage.getItem("tasks")
     ? JSON.parse(window.localStorage.getItem("tasks"))
     : [];
-  const [tasks, setTasks] = useState(localstorage);
-  //const [done, setDone] = useState([]);
-  //const [notyet, setNotyet] = useState([]);
+  const [tasks, setTasks] = useState(localstorageTasks);
+  const [platform, setPlatform] = useState("All tasks");
+  const [toggle, setToggle] = useState("");
   const [input, setInput] = useState("");
   const [colapse, setColapse] = useState(false);
   const hundleAddTask = () => {
@@ -27,6 +27,7 @@ export default function TodoList() {
           detail: "",
           Id: Date.now(),
           time: new Date().toLocaleDateString("en-GB"),
+          done: false,
         },
       ]);
       setInput("");
@@ -50,9 +51,21 @@ export default function TodoList() {
     );
   }
 
+  function hundleDone(id) {
+    let updatedTasks = tasks.map((t) =>
+      t.Id === id ? { ...t, done: true } : t
+    );
+    setTasks(updatedTasks);
+  }
+  const done = tasks.filter((t) => t.done);
+  const notyet = tasks.filter((t) => !t.done);
+
   // hundle delete and update and done :
 
-  window.localStorage.setItem("tasks", JSON.stringify(tasks));
+  useEffect(() => {
+    window.localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   return (
     <>
       <Container
@@ -78,13 +91,38 @@ export default function TodoList() {
         >
           TODO LIST
         </div>
-        <ToggleButtonGroup>
-          <ToggleButton value="All tasks">All tasks</ToggleButton>
-          <ToggleButton value="Finiched tasks">Finiched tasks</ToggleButton>
-          <ToggleButton value="Unfiniched tasks">Unfiniched tasks</ToggleButton>
+        <ToggleButtonGroup
+          color="primary"
+          value={platform}
+          exclusive
+          onChange={(e, newValue) => setPlatform(newValue)}
+          aria-label="Platform"
+        >
+          <ToggleButton value="All tasks" onClick={() => setToggle("all")}>
+            All tasks
+          </ToggleButton>
+          <ToggleButton
+            value="Finiched tasks"
+            onClick={() => setToggle("finiched")}
+          >
+            Finiched tasks
+          </ToggleButton>
+          <ToggleButton
+            value="Unfiniched tasks"
+            onClick={() => setToggle("Unfiniched")}
+          >
+            Unfiniched tasks
+          </ToggleButton>
         </ToggleButtonGroup>
-        <FormContext.Provider value={{ hundleUpdate }}>
-          {tasks.map((t) => {
+        <FormContext.Provider value={{ hundleUpdate, tasks }}>
+          {(toggle === "all"
+            ? tasks
+            : toggle === "finiched"
+            ? done
+            : toggle === "Unfiniched"
+            ? notyet
+            : tasks
+          ).map((t) => {
             return (
               <Task
                 key={t.Id}
@@ -92,8 +130,12 @@ export default function TodoList() {
                 title={t.title}
                 detail={t.detail}
                 time={t.time}
+                done={t.done}
                 onDelete={() => {
                   deletetask(t.Id);
+                }}
+                onDone={() => {
+                  hundleDone(t.Id);
                 }}
               ></Task>
             );
