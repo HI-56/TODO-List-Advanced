@@ -9,15 +9,18 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import TextField from "@mui/material/TextField";
 import Collapse from "@mui/material/Collapse";
 import { FormContext } from "./context";
+import ToastPopup from "./components/puppupToast";
+
 export default function TodoList() {
-  const localstorageTasks = window.localStorage.getItem("tasks")
-    ? JSON.parse(window.localStorage.getItem("tasks"))
-    : [];
-  const [tasks, setTasks] = useState(localstorageTasks);
+  const [tasks, setTasks] = useState(() => {
+    const stored = localStorage.getItem("tasks");
+    return stored ? JSON.parse(stored) : [];
+  });
   const [platform, setPlatform] = useState("All tasks");
   const [toggle, setToggle] = useState("");
   const [input, setInput] = useState("");
   const [colapse, setColapse] = useState(false);
+
   const hundleAddTask = () => {
     if (input !== "") {
       setTasks([
@@ -32,6 +35,7 @@ export default function TodoList() {
       ]);
       setInput("");
       setColapse(false);
+      setToast(true);
     }
   };
   // hundle delete and update and done :
@@ -40,14 +44,21 @@ export default function TodoList() {
     let newTasks = tasks.filter((t) => {
       return t.Id !== id;
     });
-    return setTasks(newTasks);
+    setMsg("Task deleted successfully 🗑️");
+    setSeverity("error");
+    return setTasks(newTasks), setToast(true);
   }
 
   function hundleUpdate(id, form) {
     return setTasks(
       tasks.map((t) =>
-        t.Id === id ? { ...t, title: form.newtitle, detail: form.detail } : t
-      )
+        t.Id === id
+          ? { ...t, title: form.newtitle, detail: form.detail, done: false }
+          : t
+      ),
+      setMsg("Task updated successfully ✏️"),
+      setSeverity("info"),
+      setToast(true)
     );
   }
 
@@ -56,11 +67,21 @@ export default function TodoList() {
       t.Id === id ? { ...t, done: true } : t
     );
     setTasks(updatedTasks);
+    setMsg("Task is Done");
+    setSeverity("success");
+    setToast(true);
   }
   const done = tasks.filter((t) => t.done);
   const notyet = tasks.filter((t) => !t.done);
 
   // hundle delete and update and done :
+  // hundle popUp msgs for each add , delete,update :
+  const [toast, setToast] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [severity, setSeverity] = useState("");
+  function hundleToastClose() {
+    setToast(false);
+  }
 
   useEffect(() => {
     window.localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -163,13 +184,23 @@ export default function TodoList() {
             size="medium"
             color="info"
             aria-label="add"
-            onClick={hundleAddTask}
+            onClick={() => {
+              hundleAddTask();
+              setMsg("Task added successfully ✅");
+              setSeverity("success");
+            }}
             onMouseEnter={() => {
               setColapse(true);
             }}
           >
             <AddIcon />
           </Fab>
+          <ToastPopup
+            open={toast}
+            hundleClose={() => hundleToastClose()}
+            msg={msg}
+            severity={severity}
+          ></ToastPopup>
         </div>
       </Container>
     </>
